@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 
 database_name = os.environ.get("DATA_BASE_NAME")
 
-database_path = "postgresql://{}/{}".format(
-            'localhost:5432', database_name)
+database_path = os.environ.get("DATABASE_URL", "postgresql://{}/{}".format(
+            'localhost:5432', database_name))
 db = SQLAlchemy()
 
 '''
