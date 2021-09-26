@@ -1,0 +1,255 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.2
+-- Dumped by pg_dump version 13.2
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: genderenum; Type: TYPE; Schema: public; Owner: svitlanalesiv
+--
+
+CREATE TYPE public.genderenum AS ENUM (
+    'female',
+    'male'
+);
+
+
+ALTER TYPE public.genderenum OWNER TO svitlanalesiv;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: actors; Type: TABLE; Schema: public; Owner: svitlanalesiv
+--
+
+CREATE TABLE public.actors (
+    id integer NOT NULL,
+    name character varying(80) NOT NULL,
+    age integer,
+    gender public.genderenum
+);
+
+
+ALTER TABLE public.actors OWNER TO svitlanalesiv;
+
+--
+-- Name: actors_id_seq; Type: SEQUENCE; Schema: public; Owner: svitlanalesiv
+--
+
+CREATE SEQUENCE public.actors_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.actors_id_seq OWNER TO svitlanalesiv;
+
+--
+-- Name: actors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: svitlanalesiv
+--
+
+ALTER SEQUENCE public.actors_id_seq OWNED BY public.actors.id;
+
+
+--
+-- Name: alembic_version; Type: TABLE; Schema: public; Owner: svitlanalesiv
+--
+
+CREATE TABLE public.alembic_version (
+    version_num character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.alembic_version OWNER TO svitlanalesiv;
+
+--
+-- Name: association_table; Type: TABLE; Schema: public; Owner: svitlanalesiv
+--
+
+CREATE TABLE public.association_table (
+    movie_id integer NOT NULL,
+    actor_id integer NOT NULL
+);
+
+
+ALTER TABLE public.association_table OWNER TO svitlanalesiv;
+
+--
+-- Name: movies; Type: TABLE; Schema: public; Owner: svitlanalesiv
+--
+
+CREATE TABLE public.movies (
+    id integer NOT NULL,
+    title character varying(80) NOT NULL,
+    release_date timestamp without time zone
+);
+
+
+ALTER TABLE public.movies OWNER TO svitlanalesiv;
+
+--
+-- Name: movies_id_seq; Type: SEQUENCE; Schema: public; Owner: svitlanalesiv
+--
+
+CREATE SEQUENCE public.movies_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.movies_id_seq OWNER TO svitlanalesiv;
+
+--
+-- Name: movies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: svitlanalesiv
+--
+
+ALTER SEQUENCE public.movies_id_seq OWNED BY public.movies.id;
+
+
+--
+-- Name: actors id; Type: DEFAULT; Schema: public; Owner: svitlanalesiv
+--
+
+ALTER TABLE ONLY public.actors ALTER COLUMN id SET DEFAULT nextval('public.actors_id_seq'::regclass);
+
+
+--
+-- Name: movies id; Type: DEFAULT; Schema: public; Owner: svitlanalesiv
+--
+
+ALTER TABLE ONLY public.movies ALTER COLUMN id SET DEFAULT nextval('public.movies_id_seq'::regclass);
+
+
+--
+-- Data for Name: actors; Type: TABLE DATA; Schema: public; Owner: svitlanalesiv
+--
+
+COPY public.actors (id, name, age, gender) FROM stdin;
+6	actor x	30	male
+7	Another actor	30	male
+8	Another actor	30	male
+4	John	30	male
+\.
+
+
+--
+-- Data for Name: alembic_version; Type: TABLE DATA; Schema: public; Owner: svitlanalesiv
+--
+
+COPY public.alembic_version (version_num) FROM stdin;
+e6699c62a6e1
+\.
+
+
+--
+-- Data for Name: association_table; Type: TABLE DATA; Schema: public; Owner: svitlanalesiv
+--
+
+COPY public.association_table (movie_id, actor_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: movies; Type: TABLE DATA; Schema: public; Owner: svitlanalesiv
+--
+
+COPY public.movies (id, title, release_date) FROM stdin;
+1	Return	2021-10-10 00:00:00
+3	Movie ABC - 2	2021-09-25 16:25:41.408725
+\.
+
+
+--
+-- Name: actors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: svitlanalesiv
+--
+
+SELECT pg_catalog.setval('public.actors_id_seq', 8, true);
+
+
+--
+-- Name: movies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: svitlanalesiv
+--
+
+SELECT pg_catalog.setval('public.movies_id_seq', 4, true);
+
+
+--
+-- Name: actors actors_pkey; Type: CONSTRAINT; Schema: public; Owner: svitlanalesiv
+--
+
+ALTER TABLE ONLY public.actors
+    ADD CONSTRAINT actors_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: alembic_version alembic_version_pkc; Type: CONSTRAINT; Schema: public; Owner: svitlanalesiv
+--
+
+ALTER TABLE ONLY public.alembic_version
+    ADD CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num);
+
+
+--
+-- Name: association_table association_table_pkey; Type: CONSTRAINT; Schema: public; Owner: svitlanalesiv
+--
+
+ALTER TABLE ONLY public.association_table
+    ADD CONSTRAINT association_table_pkey PRIMARY KEY (movie_id, actor_id);
+
+
+--
+-- Name: movies movies_pkey; Type: CONSTRAINT; Schema: public; Owner: svitlanalesiv
+--
+
+ALTER TABLE ONLY public.movies
+    ADD CONSTRAINT movies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: movies movies_title_key; Type: CONSTRAINT; Schema: public; Owner: svitlanalesiv
+--
+
+ALTER TABLE ONLY public.movies
+    ADD CONSTRAINT movies_title_key UNIQUE (title);
+
+
+--
+-- Name: association_table association_table_actor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: svitlanalesiv
+--
+
+ALTER TABLE ONLY public.association_table
+    ADD CONSTRAINT association_table_actor_id_fkey FOREIGN KEY (actor_id) REFERENCES public.actors(id);
+
+
+--
+-- Name: association_table association_table_movie_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: svitlanalesiv
+--
+
+ALTER TABLE ONLY public.association_table
+    ADD CONSTRAINT association_table_movie_id_fkey FOREIGN KEY (movie_id) REFERENCES public.movies(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
