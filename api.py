@@ -29,12 +29,16 @@ def create_app(test_config=None):
     
 
     '''
-    Uncommenting the following line to initialize the datbase
+    Uncommenting the following line to initialize the database
     !! WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
     !! THIS MUST BE UNCOMMENTED ON FIRST RUN
     !! Running this funciton will add one
     '''
-    db_drop_and_create_all()
+    # db_drop_and_create_all()
+    
+    @app.route('/')
+    def index():
+        return 'Hello'
 
     '''
     GET /actors
