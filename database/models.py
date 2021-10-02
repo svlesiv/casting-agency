@@ -52,6 +52,12 @@ def db_drop_and_create_all():
     
     actor.insert()
     
+    new_association = association_table.insert().values(
+        movie_id=movie.id, actor_id=actor.id)
+    
+    db.session.execute(new_association)
+    db.session.commit()
+    
 class GenderEnum(enum.Enum):
     female = 'female'
     male = 'male'
