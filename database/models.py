@@ -10,6 +10,8 @@ database_name = os.environ.get("DATA_BASE_NAME")
 
 database_path = os.environ.get("DATABASE_URL", "postgresql://{}/{}".format(
             'localhost:5432', database_name))
+if database_path.startswith("postgres://"):
+    database_path = database_path.replace("postgres://", "postgresql://", 1)
 db = SQLAlchemy()
 
 '''

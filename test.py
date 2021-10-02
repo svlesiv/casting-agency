@@ -27,6 +27,8 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.database_name = os.environ.get('TEST_DATA_BASE_NAME')
         self.database_path = os.environ.get('DATABASE_URL', "postgresql://{}/{}".format(
             'localhost:5432', self.database_name))
+        if self.database_path.startswith("postgres://"):
+            self.database_path = self.database_path.replace("postgres://", "postgresql://", 1)
         setup_db(self.app, self.database_path)
         CORS(self.app, resources={r"/*": {"origins": "*"}})
 
